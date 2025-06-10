@@ -1,12 +1,16 @@
 const twikoo = require('twikoo-vercel');
 
 export default async function handler(req, res) {
-  // 添加 CORS 支持
-  res.setHeader('Access-Control-Allow-Origin', 'https://srpn.top'); // 或者指定你的域名，如 ''
+  // 允许跨域请求
+  res.setHeader('Access-Control-Allow-Origin', 'https://srpn.top');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(204).end();
 
-  // 调用 Twikoo 主体逻辑
+  // 如果是预检请求，直接返回 204（必须处理，不然浏览器请求会失败）
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
+  // Twikoo 主体逻辑
   return twikoo(req, res);
 }
